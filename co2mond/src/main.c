@@ -254,6 +254,8 @@ main_loop()
         }
         else
         {
+            fprintf(stderr, "Device detected, waiting for initialization\n");
+            sleep(30);
             error_shown = 0;
         }
 
