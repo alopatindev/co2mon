@@ -118,6 +118,19 @@ write_value(const char *name, const char *value)
     return result;
 }
 
+static int
+remove_value(const char *name)
+{
+    if (!datadir)
+    {
+        return 1;
+    }
+
+    char filename[PATH_MAX];
+    snprintf(filename, PATH_MAX, "%s/%s", datadir, name);
+    remove(filename);
+}
+
 static void
 write_heartbeat()
 {
@@ -247,6 +260,8 @@ main_loop()
             if (!error_shown)
             {
                 fprintf(stderr, "Unable to open CO2 device\n");
+                remove_value("Tamb");
+                remove_value("CntR");
                 error_shown = 1;
             }
             sleep(1);
@@ -254,6 +269,8 @@ main_loop()
         }
         else
         {
+            remove_value("Tamb");
+            remove_value("CntR");
             fprintf(stderr, "Device detected, waiting for initialization\n");
             sleep(30);
             error_shown = 0;
